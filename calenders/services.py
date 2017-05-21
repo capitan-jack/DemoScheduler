@@ -93,3 +93,8 @@ def schedule_g_calendar_event(appointment):
         events().\
         insert(calendarId=appointment.user.caleder.first().calender_id,
                body=event, sendNotifications=True,).execute()
+
+
+def get_existing_demos(year, month, day):
+    date = datetime.date(year, month, day)
+    return DemoAppointment.objects.filter(date=date).all()

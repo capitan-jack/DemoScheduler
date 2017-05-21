@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from .forms import AppointmentSlotsForm, DemoScheduleForm, CalendarAttachForm
+from .services import get_existing_demos
 from oauth2client.contrib import xsrfutil
 import httplib2
 from oauth2client.client import OAuth2WebServerFlow
@@ -58,7 +59,12 @@ def available_slots(request, year=None, month=None, day=None):
 		form = DemoScheduleForm(year=int(year),
 								month=int(month),
 								day=int(day))
-		return render(request, 'calenders/schedule_demo.html', {'form':form})
+		return render(request,
+					  'calenders/schedule_demo.html',
+					  {'form':form, 
+					   'demos':get_existing_demos(int(year),
+					   						      int(month),
+					   						      int(day))})
 	if request.method == 'POST':
 		form = DemoScheduleForm(request.POST,
 								year=int(year),
