@@ -62,13 +62,15 @@ class DemoScheduleForm(forms.Form):
         avail_slots = get_available_slots_by_date(date)
         self.fields['demo_slot'] = \
             forms.\
-            ChoiceField(choices=list(map(lambda time: (time,str(time)), avail_slots)))
+            ChoiceField(choices=list(map(lambda time: (time,str(time)), 
+                                         avail_slots)))
 
 
     def save(self):
         appointment = DemoAppointment()
         appointment.date = self._date
-        appointment.start_time = datetime.time(*list(map(int,self.cleaned_data['demo_slot'].split(':'))))
+        appointment.start_time = datetime.\
+            time(*list(map(int,self.cleaned_data['demo_slot'].split(':'))))
         appointment.client_email = self.cleaned_data['email']
         appointment.scheduled = False
         appointment.soft_deleted = False

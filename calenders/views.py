@@ -55,13 +55,20 @@ def available_slots(request, year=None, month=None, day=None):
 	if year == None or month == None or day == None:
 		return render(request, 'calenders/schedule_demo.html')
 	if request.method == 'GET':
-		form = DemoScheduleForm(year=int(year),month=int(month), day=int(day))
+		form = DemoScheduleForm(year=int(year),
+								month=int(month),
+								day=int(day))
 		return render(request, 'calenders/schedule_demo.html', {'form':form})
 	if request.method == 'POST':
-		form = DemoScheduleForm(request.POST, year=int(year),month=int(month), day=int(day))
+		form = DemoScheduleForm(request.POST,
+								year=int(year),
+								month=int(month),
+								day=int(day))
 		if form.is_valid():
 			form.save()
-			return render(request, 'calenders/schedule_demo.html', {'form':form})
+			return render(request, 
+						  'calenders/schedule_demo.html',
+						  {'form':form})
 	return render(request, 'calenders/schedule_demo.html')
 
 
@@ -74,7 +81,9 @@ def google_calender_permission(request):
 
 
 def google_auth_return(request):
-	if not xsrfutil.validate_token(settings.SECRET_KEY, request.GET.get('state').encode("utf-8"),request.user):
+	if not xsrfutil.validate_token(settings.SECRET_KEY,
+								   request.GET.get('state').encode("utf-8"),
+								   request.user):
 		return  HttpResponseBadRequest()
 	credential = FLOW.step2_exchange(request.GET)
 	print(credential.to_json())
@@ -84,11 +93,9 @@ def google_auth_return(request):
 	calendar_data = service.calendarList().list().execute()
 	for calendar in calendar_data['items']:
 		if 'primary' in calendar and calendar['primary'] == True:
-			form = CalendarAttachForm({'calender_id':calendar['id'], 'refresh_token':credential.refresh_token})
-			print('here')
+			form = CalendarAttachForm({
+				'calender_id':calendar['id'],
+				'refresh_token':credential.refresh_token})
 			if form.is_valid():
-				print('here')
 				form.save(request.user)
-			print(form.errors)
-			return redirect('calenders:index')
 	return redirect('calenders:index')

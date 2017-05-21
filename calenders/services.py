@@ -23,7 +23,8 @@ def get_available_slots_by_date(date):
     for slot in app_slots:
         start = slot.start_time
         while start<slot.end_time:
-            available_slots[str(start)] = available_slots.get(str(start), 0)+1
+            available_slots[str(start)] = \
+                available_slots.get(str(start), 0)+1
             temp = datetime.datetime.combine(date, start) + \
             datetime.timedelta(minutes=30)
             start = temp.time()
@@ -51,6 +52,8 @@ def get_next_sales_rep(date, time):
                key=lambda user: len(user.appointments.filter(date=date).all()))
 
 
+'''Sends a Google calender event add request to Google calender api with
+    notificatons.''' 
 def schedule_g_calendar_event(appointment):
     credentials = client.OAuth2Credentials(
     None, settings.G_CLIENT_ID, settings.G_CLIENT_SECRET, 
@@ -63,11 +66,15 @@ def schedule_g_calendar_event(appointment):
         'location': 'Online',
         'description': 'Scribe demo',
         'start': {
-            'dateTime': datetime.datetime.combine(appointment.date, appointment.start_time).isoformat(),
+            'dateTime': datetime.\
+                datetime.\
+                combine(appointment.date, appointment.start_time).\
+                isoformat(),
             'timeZone': 'UTC',
         },
         'end': {
-            'dateTime': (datetime.datetime.combine(appointment.date, appointment.start_time) +\
+            'dateTime': (datetime.datetime.\
+                combine(appointment.date, appointment.start_time) +\
                 datetime.timedelta(minutes=30)).isoformat(),
             'timeZone': 'UTC',
         },
@@ -82,4 +89,7 @@ def schedule_g_calendar_event(appointment):
             ],
         },
     }
-    event = service.events().insert(calendarId=appointment.user.caleder.first().calender_id, body=event, sendNotifications=True,).execute()
+    event = service.\
+        events().\
+        insert(calendarId=appointment.user.caleder.first().calender_id,
+               body=event, sendNotifications=True,).execute()
