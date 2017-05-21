@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['ec2-34-210-173-7.us-west-2.compute.amazonaws.com:8000', 'ec2-34-210-173-7.us-west-2.compute.amazonaws.com']
 G_CLIENT_ID = '1019974299845-voocfsutq7s4pqhdc0c4m0lq4g29pbdr.apps.googleusercontent.com'
 G_CLIENT_SECRET = 'r5T5dvF1WSHbZ6zJ1MgctezI'
-G_REDIRECT_URI = 'http://127.0.0.1:8000/calenders/attach_calender/'
+G_REDIRECT_URI = 'http://ec2-34-210-173-7.us-west-2.compute.amazonaws.com:8000/calenders/attach_calender/'
 
 # Application definition
 
